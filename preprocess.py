@@ -23,7 +23,7 @@ def get_article_label(topics):
     :param topics: Set of topics to which an article belongs
     :return: 90-digit binary one-hot encoded label
     """
-    category_label = [0 for x in range(90)]
+    category_label = [0 for x in range(len(topic_num_map))]
     for topic in topics:
         if topic.text in topic_num_map:
             category_label[topic_num_map[topic.text]] = 1
