@@ -62,9 +62,9 @@ def parse_documents():
 if __name__ == "__main__":
     train_documents, test_documents = parse_documents()
     print("Train, test dataset sizes:", len(train_documents), len(test_documents))
-    with open("reuters_train.tsv", 'w') as tsv_file:
+    with open("reuters_train.tsv", 'w', encoding='utf8') as tsv_file:
         for label, document in train_documents:
             tsv_file.write(label + "\t" + document + "\n")
-    with open("reuters_test.tsv", 'w') as tsv_file:
+    with open("reuters_test.tsv", 'w', encoding='utf8') as tsv_file:
         for label, document in test_documents:
             tsv_file.write(label + "\t" + document + "\n")
