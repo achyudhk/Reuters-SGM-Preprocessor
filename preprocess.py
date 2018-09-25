@@ -1,5 +1,6 @@
 from bs4 import BeautifulSoup
 from topics import topic_num_map
+from sklearn.model_selection import train_test_split
 import os
 
 
@@ -33,7 +34,7 @@ def get_article_label(topics):
         return None
 
 
-def parse_documents():
+def parse_documents(validation_split=False):
     """
     Extract the Reuters-90 dataset from the SGM files in data folder according to the ApteMod splits. This method
     returns the documents that belong to at least one of the categories that have at least one document in both the
@@ -56,14 +57,21 @@ def parse_documents():
                         train_documents.append((label, get_article_text(article)))
                     elif article.attrs['lewissplit'] == "TEST":
                         test_documents.append((label, get_article_text(article)))
-    return train_documents, test_documents
+    if validation_split:
+        train_documents, validation_documents = train_test_split(train_documents, test_size=0.25)
+        return train_documents, validation_documents, test_documents
+    else:
+        return train_documents, test_documents
 
 
 if __name__ == "__main__":
-    train_documents, test_documents = parse_documents()
+    train_documents, validation_documents, test_documents = parse_documents(validation_split=True)
     print("Train, test dataset sizes:", len(train_documents), len(test_documents))
     with open("reuters_train.tsv", 'w', encoding='utf8') as tsv_file:
         for label, document in train_documents:
+            tsv_file.write(label + "\t" + document + "\n")
+    with open("reuters_validation.tsv", 'w', encoding='utf8') as tsv_file:
+        for label, document in validation_documents:
             tsv_file.write(label + "\t" + document + "\n")
     with open("reuters_test.tsv", 'w', encoding='utf8') as tsv_file:
         for label, document in test_documents:
