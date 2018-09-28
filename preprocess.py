@@ -58,7 +58,7 @@ def parse_documents(validation_split=False):
                     elif article.attrs['lewissplit'] == "TEST":
                         test_documents.append((label, get_article_text(article)))
     if validation_split:
-        train_documents, validation_documents = train_test_split(train_documents, test_size=0.25)
+        train_documents, validation_documents = train_test_split(train_documents, test_size=0.25, random_state=37)
         return train_documents, validation_documents, test_documents
     else:
         return train_documents, test_documents
